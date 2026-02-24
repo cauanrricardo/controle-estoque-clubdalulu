@@ -15,7 +15,7 @@ public class ProdutoService {
         this.repository = repository;
     }
 
-    @Transactional //protege (ou executa ou falha e da um rollback
+    @Transactional //protege (executa ou falha eh da um rollback
     public Produto criarProduto(Produto produto){ //produto = retorna(devolve o oeto salvo) o id e etc
         return repository.save(produto);
     }
