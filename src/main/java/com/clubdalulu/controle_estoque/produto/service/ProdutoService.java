@@ -1,18 +1,25 @@
 package com.clubdalulu.controle_estoque.produto.service;
 
+import com.clubdalulu.controle_estoque.movimentacao.domain.MovimentacaoEstoque;
+import com.clubdalulu.controle_estoque.movimentacao.domain.TipoMovimentacao;
+import com.clubdalulu.controle_estoque.movimentacao.repository.MovimentacaoRepository;
 import com.clubdalulu.controle_estoque.produto.domain.Produto;
 import com.clubdalulu.controle_estoque.produto.repository.ProdutoRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class ProdutoService {
     private final ProdutoRepository repository;
+    private final MovimentacaoRepository movimentacaoRepository;
 
-    public ProdutoService(ProdutoRepository repository){
+    public ProdutoService(ProdutoRepository repository, MovimentacaoRepository movimentacaoRepository) {
         this.repository = repository;
+        this.movimentacaoRepository = movimentacaoRepository;
+
     }
 
     @Transactional //protege (executa ou falha eh da um rollback
@@ -68,6 +75,14 @@ public class ProdutoService {
        }
        Produto produto = buscarProdutoPorId(id);
        produto.setEstoque(produto.getEstoque() + quantidade);
+
+        MovimentacaoEstoque mov = new MovimentacaoEstoque();
+        mov.setProduto(produto);
+        mov.setTipo(TipoMovimentacao.ENTRADA);
+        mov.setQuantidade(quantidade);
+        mov.setDataHora(LocalDateTime.now());
+        movimentacaoRepository.save(mov);
+
        return repository.save(produto);
     }
 
@@ -81,6 +96,14 @@ public class ProdutoService {
             throw new RuntimeException("Estoque insuficiente para a saída");
         }
         produto.setEstoque(produto.getEstoque() - quantidade);
+
+        MovimentacaoEstoque mov = new MovimentacaoEstoque();
+        mov.setProduto(produto);
+        mov.setTipo(TipoMovimentacao.SAIDA);
+        mov.setQuantidade(quantidade);
+        mov.setDataHora(LocalDateTime.now());
+        movimentacaoRepository.save(mov);
+
         return repository.save(produto);
     }
 }
