@@ -7,6 +7,8 @@ import com.clubdalulu.controle_estoque.produto.domain.Produto;
 import com.clubdalulu.controle_estoque.produto.repository.ProdutoRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import com.clubdalulu.controle_estoque.shared.exception.BadRequestException;
+import com.clubdalulu.controle_estoque.shared.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,13 +45,13 @@ public class ProdutoService {
     @Transactional(readOnly = true) //so leitura, nao tem modificacao
     public Produto buscarProdutoPorId(Long id){
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Produto não encontrado"));
     }
 
     @Transactional
     public void deletarProduto(Long id){
         if (!repository.existsById(id)){
-            throw new RuntimeException("Produto não encontrado");
+            throw new NotFoundException("Produto não encontrado");
         }
         repository.deleteById(id);
     }
@@ -58,7 +60,7 @@ public class ProdutoService {
     public Produto atualizarProduto(Long id, Produto produtoAtualizado){
         Integer estoque = produtoAtualizado.getEstoque();
         if (estoque == null || estoque < 0) {
-            throw new RuntimeException("Estoque não pode ser nulo ou negativo");
+            throw new BadRequestException("Estoque não pode ser nulo ou negativo");
         }
 
         Produto produtoExistente = buscarProdutoPorId(id);
@@ -71,7 +73,7 @@ public class ProdutoService {
     @Transactional
     public Produto entradaEstoque(Long id, Integer quantidade){
        if(quantidade == null || quantidade <= 0){
-           throw new RuntimeException("Quantidade deve ser maior que 0");
+           throw new BadRequestException("Quantidade deve ser maior que 0");
        }
        Produto produto = buscarProdutoPorId(id);
        produto.setEstoque(produto.getEstoque() + quantidade);
@@ -89,11 +91,11 @@ public class ProdutoService {
     @Transactional
     public Produto saidaEstoque(Long id, Integer quantidade){
         if(quantidade == null || quantidade <= 0){
-            throw new RuntimeException("Quantidade deve ser maior que 0");
+            throw new BadRequestException("Quantidade deve ser maior que 0");
         }
         Produto produto = buscarProdutoPorId(id);
         if (produto.getEstoque() < quantidade) {
-            throw new RuntimeException("Estoque insuficiente para a saída");
+            throw new BadRequestException("Estoque insuficiente para a saída");
         }
         produto.setEstoque(produto.getEstoque() - quantidade);
 
