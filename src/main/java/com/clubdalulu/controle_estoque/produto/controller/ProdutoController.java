@@ -50,4 +50,16 @@ public class ProdutoController {
         return ResponseEntity.ok(atualizado);
     }
 
+    @PostMapping("/{id}/entrada")
+    public ResponseEntity<Produto> atualizarEstoque(@PathVariable Long id, @RequestParam Integer quantidade) {
+        Produto atualizado = service.entradaEstoque(id, quantidade);
+        return ResponseEntity.ok(atualizado);
+    }
+
+    @PostMapping("/{id}/saida")
+    public ResponseEntity<Produto> saidaEstoque(@PathVariable Long id, @RequestParam Integer quantidade){
+        Produto atualizado = service.saidaEstoque(id, quantidade);
+        return ResponseEntity.ok(atualizado);
+    }
+
 }

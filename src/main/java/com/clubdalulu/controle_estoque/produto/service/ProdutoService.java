@@ -60,4 +60,27 @@ public class ProdutoService {
 
         return repository.save(produtoExistente);
     }
+
+    @Transactional
+    public Produto entradaEstoque(Long id, Integer quantidade){
+       if(quantidade == null || quantidade <= 0){
+           throw new RuntimeException("Quantidade deve ser maior que 0");
+       }
+       Produto produto = buscarProdutoPorId(id);
+       produto.setEstoque(produto.getEstoque() + quantidade);
+       return repository.save(produto);
+    }
+
+    @Transactional
+    public Produto saidaEstoque(Long id, Integer quantidade){
+        if(quantidade == null || quantidade <= 0){
+            throw new RuntimeException("Quantidade deve ser maior que 0");
+        }
+        Produto produto = buscarProdutoPorId(id);
+        if (produto.getEstoque() < quantidade) {
+            throw new RuntimeException("Estoque insuficiente para a saída");
+        }
+        produto.setEstoque(produto.getEstoque() - quantidade);
+        return repository.save(produto);
+    }
 }
