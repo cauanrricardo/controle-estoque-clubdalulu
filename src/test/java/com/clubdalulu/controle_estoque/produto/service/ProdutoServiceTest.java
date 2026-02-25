@@ -4,6 +4,8 @@ import com.clubdalulu.controle_estoque.movimentacao.domain.MovimentacaoEstoque;
 import com.clubdalulu.controle_estoque.movimentacao.repository.MovimentacaoRepository;
 import com.clubdalulu.controle_estoque.produto.domain.Produto;
 import com.clubdalulu.controle_estoque.produto.repository.ProdutoRepository;
+import com.clubdalulu.controle_estoque.shared.exception.BadRequestException;
+import com.clubdalulu.controle_estoque.shared.exception.NotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -11,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.rmi.NotBoundException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,6 +52,7 @@ public class ProdutoServiceTest {
                     .thenReturn(Optional.of(produto));
             when(produtoRepository.save(any(Produto.class)))
                     .thenAnswer(invocation -> invocation.getArgument(0));
+
             Produto resultado = produtoService.entradaEstoque(id, 5);
 
             assertEquals(15, resultado.getEstoque());
@@ -59,6 +64,7 @@ public class ProdutoServiceTest {
         @Test
         @DisplayName("Saída válida subtrai e salva movimentação")
         void deveSubtrairQuantidadeDoEstoqueERegistrarMovimentacao() {
+
             Long id = 1L;
             Produto produto = new Produto();
             produto.setId(id);
@@ -80,6 +86,7 @@ public class ProdutoServiceTest {
         @Test
         @DisplayName("Saída com estoque insuficiente lança exception e não salva nada")
         void saidaComEstoqueInsuficienteLancaException() {
+
             Long id = 1L;
             Produto produto = new Produto();
             produto.setId(id);
@@ -89,8 +96,8 @@ public class ProdutoServiceTest {
             when(produtoRepository.findById(id))
                     .thenReturn(Optional.of(produto));
 
-            RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-                produtoService.saidaEstoque(id, 3);
+            BadRequestException exception = assertThrows(BadRequestException.class, () -> {
+                produtoService.saidaEstoque(id,3);
             });
 
             assertEquals("Estoque insuficiente para a saída", exception.getMessage());
@@ -106,8 +113,8 @@ public class ProdutoServiceTest {
 
             Long id = 1L;
 
-            RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-                produtoService.entradaEstoque(id, 0);
+            BadRequestException exception = assertThrows(BadRequestException.class, () -> {
+                produtoService.saidaEstoque(id,0);
             });
 
             assertEquals("Quantidade deve ser maior que 0", exception.getMessage());
@@ -125,7 +132,7 @@ public class ProdutoServiceTest {
             when(produtoRepository.findById(id))
                     .thenReturn(Optional.empty());
 
-            RuntimeException exception = org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class, () -> {
+            NotFoundException exception = assertThrows(NotFoundException.class, () -> {
                 produtoService.entradaEstoque(id, 5);
             });
 
