@@ -37,8 +37,13 @@
                     th:attr="data-bs-title=${form.id == null ? 'Novo produto' : 'Editar produto'}">
                 + Produto
             </button>
+
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button class="btn btn-outline-danger btn-sm" type="submit">Sair</button>
+            </form>
         </div>
     </div>
+
 
     <!-- Alertas -->
     <div th:if="${sucesso}" class="alert alert-success alert-dismissible fade show" role="alert">
