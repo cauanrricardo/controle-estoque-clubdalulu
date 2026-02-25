@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Controle de Estoque - Produtos</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+
+<body class="bg-light">
+<div class="container py-3 py-md-4">
+
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
+        <div>
+            <h4 class="mb-0">Produtos</h4>
+            <div class="text-muted small">Controle de estoque</div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-secondary btn-sm" th:href="@{/web/produtos}">Limpar</a>
+
+            <!-- Botão abrir offcanvas -->
+            <button class="btn btn-primary btn-sm"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasProduto"
+                    aria-controls="offcanvasProduto"
+                    th:attr="data-bs-title=${form.id == null ? 'Novo produto' : 'Editar produto'}">
+                + Produto
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Alertas -->
+    <div th:if="${sucesso}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${sucesso}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div th:if="${erro}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${erro}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Busca -->
+    <form class="row g-2 mb-3" th:action="@{/web/produtos}" method="get">
+        <div class="col-12 col-md-10">
+            <input class="form-control" type="text" name="nome" placeholder="Buscar por nome..."
+                   th:value="${nomeBusca}">
+        </div>
+        <div class="col-12 col-md-2 d-grid">
+            <button class="btn btn-dark" type="submit">Buscar</button>
+        </div>
+    </form>
+
+    <!-- LISTA DESKTOP (tabela) -->
+    <div class="card d-none d-md-block">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Nome</th>
+                        <th style="width: 120px;">Estoque</th>
+                        <th style="width: 520px;">Ações</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="p : ${produtos}">
+                        <td th:text="${p.id}"></td>
+                        <td th:text="${p.nome}"></td>
+                        <td><span class="badge text-bg-secondary" th:text="${p.estoque}"></span></td>
+
+                        <td>
+                            <div class="d-flex flex-wrap gap-2">
+
+                                <!-- Entrada -->
+                                <form class="d-flex gap-2"
+                                      th:action="@{/web/produtos/{id}/entrada(id=${p.id})}" method="post">
+                                    <input class="form-control form-control-sm" type="number" name="quantidade" min="1"
+                                           placeholder="+ qtd" required style="width: 100px;">
+                                    <button class="btn btn-sm btn-outline-success" type="submit">Entrada</button>
+                                </form>
+
+                                <!-- Saída -->
+                                <form class="d-flex gap-2"
+                                      th:action="@{/web/produtos/{id}/saida(id=${p.id})}" method="post">
+                                    <input class="form-control form-control-sm" type="number" name="quantidade" min="1"
+                                           placeholder="- qtd" required style="width: 100px;">
+                                    <button class="btn btn-sm btn-outline-warning" type="submit">Saída</button>
+                                </form>
+
+                                <!-- Editar -->
+                                <a class="btn btn-sm btn-outline-primary"
+                                   th:href="@{/web/produtos/{id}/editar(id=${p.id})}">
+                                    Editar
+                                </a>
+
+                                <!-- Excluir -->
+                                <form th:action="@{/web/produtos/{id}/delete(id=${p.id})}" method="post"
+                                      onsubmit="return confirm('Excluir este produto? Isso também apagará o histórico.');">
+                                    <button class="btn btn-sm btn-outline-danger" type="submit">Excluir</button>
+                                </form>
+<!-- Histórico -->
+                                <a class="btn btn-sm btn-outline-dark"
+                                   th:href="@{/web/produtos/{id}/movimentacoes(id=${p.id})}">
+                                    Histórico
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(produtos)}">
+                        <td colspan="4" class="text-center text-muted py-4">
+                            Nenhum produto encontrado.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- LISTA MOBILE (cards) -->
+    <div class="d-md-none">
+        <div class="vstack gap-2">
+            <div class="card" th:each="p : ${produtos}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="fw-semibold" th:text="${p.nome}"></div>
+                            <div class="text-muted small">ID: <span th:text="${p.id}"></span></div>
+                        </div>
+                        <span class="badge text-bg-secondary fs-6" th:text="${p.estoque}"></span>
+                    </div>
+
+                    <div class="row g-2 mt-2">
+                        <div class="col-6">
+                            <form th:action="@{/web/produtos/{id}/delete(id=${p.id})}" method="post"
+                                  onsubmit="return confirm('Excluir este produto? Isso também apagará o histórico.');">
+                                <button class="btn btn-sm btn-outline-danger w-100" type="submit">Excluir</button>
+                            </form>
+                        </div>
+
+                        <div class="col-6">
+                            <a class="btn btn-sm btn-outline-dark w-100"
+                               th:href="@{/web/produtos/{id}/movimentacoes(id=${p.id})}">
+                                Histórico
+                            </a>
+                        </div>
+
+
+                        <div class="col-6">
+                            <a class="btn btn-sm btn-outline-primary w-100"
+                               th:href="@{/web/produtos/{id}/editar(id=${p.id})}">Editar</a>
+                        </div>
+
+                        <div class="col-6">
+                            <form th:action="@{/web/produtos/{id}/delete(id=${p.id})}" method="post"
+                                  onsubmit="return confirm('Excluir este produto? Isso também apagará o histórico.');">
+                                <button class="btn btn-sm btn-outline-danger w-100" type="submit">Excluir</button>
+                            </form>
+                        </div><div class="col-6">
+                        <a class="btn btn-sm btn-outline-dark w-100"
+                           th:href="@{/web/produtos/{id}/movimentacoes(id=${p.id})}">
+                            Histórico
+                        </a>
+                    </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(produtos)}" class="text-center text-muted py-4">
+                Nenhum produto encontrado.
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- OFFCANVAS CADASTRO/EDIÇÃO -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProduto" aria-labelledby="offcanvasProdutoLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasProdutoLabel"
+            th:text="${form.id == null ? 'Novo produto' : 'Editar produto'}"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+    </div>
+
+    <div class="offcanvas-body">
+        <form th:action="@{/web/produtos}" method="post" th:object="${form}" class="vstack gap-3">
+            <input type="hidden" th:field="*{id}"/>
+
+            <div>
+                <label class="form-label">Nome</label>
+                <input class="form-control" th:field="*{nome}" placeholder="Ex: Máscara Glamour" required>
+            </div>
+
+            <div>
+                <label class="form-label">Estoque</label>
+                <input class="form-control" type="number" min="0" th:field="*{estoque}" required>
+                <div class="form-text">Use 0 se estiver sem estoque.</div>
+            </div>
+
+            <button class="btn btn-success" type="submit"
+                    th:text="${form.id == null ? 'Salvar' : 'Atualizar'}"></button>
+
+            <a class="btn btn-outline-secondary" th:href="@{/web/produtos}" th:if="${form.id != null}">
+                Cancelar edição
+            </a>
+        </form>
+    </div>
+</div>
+
+<!-- Se estiver editando, abre o offcanvas automaticamente -->
+<script th:if="${form.id != null}">
+    const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasProduto'));
+    offcanvas.show();
+</script>
+
+</body>
+</html>

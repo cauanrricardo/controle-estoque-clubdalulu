@@ -53,6 +53,8 @@ public class ProdutoService {
         if (!repository.existsById(id)){
             throw new NotFoundException("Produto não encontrado");
         }
+        movimentacaoRepository.deleteByProdutoId(id);
+
         repository.deleteById(id);
     }
 
