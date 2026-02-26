@@ -1,8 +1,6 @@
-# Secrets / configs locais
 src/main/resources/application-dev.properties
 .env
 
-# Maven/Java
 target/
 *.log
 .DS_Store
