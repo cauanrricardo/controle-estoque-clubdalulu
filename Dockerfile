@@ -15,5 +15,4 @@ EXPOSE 8080
 # copia o jar gerado no build
 COPY --from=build /app/target/*.jar app.jar
 
-# inicia a aplicação
-CMD ["sh", "-c", "java -jar app.jar"]
+CMD ["sh", "-c", "java -Dserver.port=${PORT} -jar app.jar"]
