@@ -1,0 +1,12 @@
+spring.application.name=controle-estoque
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/db-controle-estoque
+spring.datasource.username=postgres
+spring.datasource.password=COLOQUE_SUA_SENHA_AQUI
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
+app.security.pin=COLOQUE_SEU_PIN_AQUI
