@@ -21,11 +21,10 @@ public class ProdutoService {
     public ProdutoService(ProdutoRepository repository, MovimentacaoRepository movimentacaoRepository) {
         this.repository = repository;
         this.movimentacaoRepository = movimentacaoRepository;
-
     }
 
     @Transactional //protege (executa ou falha eh da um rollback
-    public Produto criarProduto(Produto produto){ //produto = retorna(devolve o oeto salvo) o id e etc
+    public Produto criarProduto(Produto produto){ //produto = retorna(devolve o objeto salvo) o id e etc
         return repository.save(produto);
     }
 

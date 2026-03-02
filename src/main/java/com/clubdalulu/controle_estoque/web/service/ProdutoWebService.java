@@ -16,7 +16,6 @@ public class ProdutoWebService {
     private final MovimentacaoRepository movimentacaoRepository;
 
     public ProdutoWebService(ProdutoService produtoService, MovimentacaoRepository movimentacaoRepository) {
-
         this.produtoService = produtoService;
         this.movimentacaoRepository = movimentacaoRepository;
     }

@@ -7,8 +7,6 @@ public class ProdutoForm {
     private String nome;
     private Integer estoque;
 
-    public ProdutoForm() {}
-
     public ProdutoForm(Long id, String nome, Integer estoque) {
         this.id = id;
         this.nome = nome;
@@ -16,7 +14,7 @@ public class ProdutoForm {
     }
 
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public void setId(Long id) {this.id = id; }
 
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }

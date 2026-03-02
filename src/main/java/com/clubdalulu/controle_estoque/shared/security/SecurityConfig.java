@@ -9,6 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    //define as rotas publicas, direcionamentos, autenticação
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

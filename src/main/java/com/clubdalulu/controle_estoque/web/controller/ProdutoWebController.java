@@ -1,8 +1,6 @@
 package com.clubdalulu.controle_estoque.web.controller;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.clubdalulu.controle_estoque.shared.exception.BadRequestException;
-import com.clubdalulu.controle_estoque.shared.exception.NotFoundException;
 import com.clubdalulu.controle_estoque.produto.domain.Produto;
 import com.clubdalulu.controle_estoque.web.form.ProdutoForm;
 import com.clubdalulu.controle_estoque.web.service.ProdutoWebService;
@@ -23,11 +21,7 @@ public class ProdutoWebController {
     }
 
     @GetMapping
-    public String telaProdutos(
-            @RequestParam(required = false) String nome,
-            @RequestParam(required = false) Long editId,
-            Model model
-    ) {
+    public String telaProdutos(@RequestParam(required = false) String nome, @RequestParam(required = false) Long editId, Model model) {
         List<Produto> produtos = webService.listarOuBuscar(nome);
 
         ProdutoForm form = new ProdutoForm(null, "", 0);
@@ -43,8 +37,7 @@ public class ProdutoWebController {
     }
 
     @PostMapping
-    public String salvarProduto(@ModelAttribute("form") ProdutoForm form,
-                                RedirectAttributes redirectAttributes) {
+    public String salvarProduto(@ModelAttribute("form") ProdutoForm form, RedirectAttributes redirectAttributes) {
         try {
             webService.salvar(form);
             redirectAttributes.addFlashAttribute("sucesso", "Produto salvo com sucesso!");
@@ -55,8 +48,7 @@ public class ProdutoWebController {
     }
 
     @PostMapping("/{id}/delete")
-    public String deletar(@PathVariable Long id,
-                          RedirectAttributes redirectAttributes) {
+    public String deletar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             webService.deletar(id);
             redirectAttributes.addFlashAttribute("sucesso", "Produto excluído com sucesso!");
@@ -67,9 +59,7 @@ public class ProdutoWebController {
     }
 
     @PostMapping("/{id}/entrada")
-    public String entrada(@PathVariable Long id,
-                          @RequestParam Integer quantidade,
-                          RedirectAttributes redirectAttributes) {
+    public String entrada(@PathVariable Long id, @RequestParam Integer quantidade, RedirectAttributes redirectAttributes) {
         try {
             webService.entrada(id, quantidade);
             redirectAttributes.addFlashAttribute("sucesso", "Entrada realizada!");
@@ -80,9 +70,7 @@ public class ProdutoWebController {
     }
 
     @PostMapping("/{id}/saida")
-    public String saida(@PathVariable Long id,
-                        @RequestParam Integer quantidade,
-                        RedirectAttributes redirectAttributes) {
+    public String saida(@PathVariable Long id, @RequestParam Integer quantidade, RedirectAttributes redirectAttributes) {
         try {
             webService.saida(id, quantidade);
             redirectAttributes.addFlashAttribute("sucesso", "Saída realizada!");
