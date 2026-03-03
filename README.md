@@ -55,6 +55,15 @@ A ideia foi transformar isso em uma solução prática e acessível, permitindo 
 
 ---
 
+## Segurança / Acesso
+
+O sistema possui uma camada de segurança com **Spring Security**, exigindo um **PIN** para acessar as funcionalidades.
+
+- O **PIN é exclusivo da dona da empresa**
+- Por segurança, o PIN **não é disponibilizado** no repositório nem neste README
+  
+---
+
 ## Como rodar localmente
 
 ### Pré-requisitos
