@@ -6,13 +6,18 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Java CI with Maven
+name: CI Spring Boot - Controle Estoque
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
 
 jobs:
   tests:
@@ -57,7 +62,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build of aplication
+      - name: Build  aplication
         run: mvn -B package -DskipTests
 
       - name: Upload do artifact
