@@ -1,5 +1,7 @@
 # Controle de Estoque — Club da Lulu
 
+[![CI](https://github.com/cauanrricardo/controle-estoque-clubdalulu/actions/workflows/ci.yml/badge.svg)](https://github.com/cauanrricardo/controle-estoque-clubdalulu/actions/workflows/ci.yml)
+
 Sistema **web** desenvolvido para **automatizar o controle de estoque da empresa Club da Lulu**.
 
 Antes, o controle era feito **no papel**, o que dificultava a organização, aumentava a chance de erro e atrasava o processo.  
