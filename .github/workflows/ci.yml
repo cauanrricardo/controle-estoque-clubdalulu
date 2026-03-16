@@ -33,6 +33,14 @@ jobs:
     - name: Run unit tests
       run: mvn -B test
 
+    - name: Publish test report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Test Report
+        path: target/surefire-reports/*.xml
+        reporter: java-junit
+
   build:
     name: Build Jar
     runs-on: ubuntu-latest
@@ -58,10 +66,3 @@ jobs:
           name: controle-estoque-jar
           path: target/*.jar
 
-      - name: Publish test report
-        uses: dorny/test-reporter@v1
-        if: always()
-        with:
-            name: Test Report
-            path: target/surefire-reports/*.xml
-            reporter: java-junit
