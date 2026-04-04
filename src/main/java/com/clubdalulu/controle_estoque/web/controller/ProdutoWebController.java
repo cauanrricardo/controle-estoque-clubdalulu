@@ -64,6 +64,7 @@ public class ProdutoWebController {
             webService.entrada(id, quantidade);
             redirectAttributes.addFlashAttribute("sucesso", "Entrada realizada!");
         } catch (Exception e) {
+            e.printStackTrace();
             redirectAttributes.addFlashAttribute("erro", e.getMessage());
         }
         return "redirect:/web/produtos";
@@ -75,6 +76,7 @@ public class ProdutoWebController {
             webService.saida(id, quantidade);
             redirectAttributes.addFlashAttribute("sucesso", "Saída realizada!");
         } catch (Exception e) {
+            e.printStackTrace();
             redirectAttributes.addFlashAttribute("erro", e.getMessage());
         }
         return "redirect:/web/produtos";

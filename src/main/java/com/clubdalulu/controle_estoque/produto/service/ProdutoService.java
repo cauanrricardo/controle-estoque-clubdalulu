@@ -24,8 +24,19 @@ public class ProdutoService {
     }
 
     @Transactional //protege (executa ou falha eh da um rollback
-    public Produto criarProduto(Produto produto){ //produto = retorna(devolve o objeto salvo) o id e etc
-        return repository.save(produto);
+    public Produto criarProduto(Produto produto) {//produto = retorna(devolve o objeto salvo) o id e etc
+        Produto salvo = repository.save(produto);
+
+        if (salvo.getEstoque() != null && salvo.getEstoque() > 0) {
+            MovimentacaoEstoque mov = new MovimentacaoEstoque();
+            mov.setProduto(salvo);
+            mov.setTipo(TipoMovimentacao.ENTRADA);
+            mov.setQuantidade(salvo.getEstoque());
+            mov.setDataHora(LocalDateTime.now());
+            movimentacaoRepository.save(mov);
+        }
+
+        return salvo;
     }
 
     @Transactional(readOnly = true)
