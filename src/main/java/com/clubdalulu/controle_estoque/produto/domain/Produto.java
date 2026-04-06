@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,4 +24,7 @@ public class Produto {
 
     @Column(nullable = false)
     private Integer estoque;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal preco;
 }

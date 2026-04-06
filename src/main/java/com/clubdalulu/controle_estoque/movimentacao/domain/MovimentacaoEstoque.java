@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -33,4 +34,7 @@ public class MovimentacaoEstoque {
 
     @Column(name = "data_hora", nullable = false)
     private LocalDateTime dataHora;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal valorTotal;
 }

@@ -1,16 +1,20 @@
 package com.clubdalulu.controle_estoque.web.form;
 
 
+import java.math.BigDecimal;
+
 public class ProdutoForm {
 
     private Long id;
     private String nome;
     private Integer estoque;
+    private BigDecimal preco;
 
-    public ProdutoForm(Long id, String nome, Integer estoque) {
+    public ProdutoForm(Long id, String nome, Integer estoque, BigDecimal preco) {
         this.id = id;
         this.nome = nome;
         this.estoque = estoque;
+        this.preco = preco;
     }
 
     public Long getId() { return id; }
@@ -21,4 +25,7 @@ public class ProdutoForm {
 
     public Integer getEstoque() { return estoque; }
     public void setEstoque(Integer estoque) { this.estoque = estoque; }
+
+    public BigDecimal getPreco() { return preco; }
+    public void setPreco(BigDecimal preco) { this.preco = preco; }
 }
